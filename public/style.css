@@ -1,0 +1,9 @@
+body{
+    background-color: aqua;
+    color: crimson;
+}
+.first{
+    padding: 2em;
+    margin: auto;
+    max-width: 500px;
+}
