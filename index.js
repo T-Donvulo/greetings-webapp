@@ -64,6 +64,7 @@ app.post("/greet", function (req, res) {
 
 app.get("/greeted", function (req, res) {
     res.render('greeted', {
+        
         greeted: Greet.getNames()
     })
 
