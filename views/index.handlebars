@@ -5,8 +5,8 @@
             </strong></br>
         </div>
         <div class="second">
-            <form action="/greet" method="post">
-                <label for="names">Name: </label><input type="text" name="namesGreeted" class="nameEnter"
+            <form action="/" method="post">
+                <label for="names">Name: </label><input type="text" name="name" class="nameEnter"
                     placeholder="e.g Thato"></br></br>
 
                 <input type="radio" value="Swahili" name="language">Swahili
@@ -25,6 +25,13 @@
         <div class="list">
             {{count}}
         </div>
+        <br>
+        <form action="/clear" method="post">
+
+       <a href="greeted">Greeted Names</a> 
+        <button id= "deleteBtn" class="clearBtn">Clear</button>
+
+        </form>
 
         </br>
         {{#if message.info}}

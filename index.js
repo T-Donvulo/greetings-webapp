@@ -2,9 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const greeting = require('./factory.js');
-const Greet = greeting();
 const session = require('express-session');
-const flash = require('express-flash')
+const flash = require('express-flash');
+const pg = require("pg");
+const Pool = pg.Pool;
+
 
 const app = express();
 
@@ -14,9 +16,28 @@ app.use(session({
     saveUninitialized: true
 }));
 
+
+
+
+// should we use a SSL connection
+let useSSL = false;
+let local = process.env.LOCAL || false;
+if (process.env.DATABASE_URL && !local){
+    useSSL = true;
+}
+
+const connectionString = process.env.DATABASE_URL || 'postgresql://coder:pg123@localhost:5432/greeting_webapp';
+
+
+const pool = new Pool({
+    connectionString,
+    // ssl : useSSL
+  });
+  const Greet = greeting(pool);
+
 // app.get('/', function (req, res) {
 //     ('index');
-
+//could be the database password: pg123
 // });
 // app.get('/addFlash', function (req, res) {
 //     req.flash('info', 'Flash Message Added');
@@ -36,52 +57,50 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 
-app.get('/', function (req, res) {
-
-    res.render('index');
+app.get('/', async function (req, res) {
+    res.render('index', {count:  await Greet.getCounter()});
 
 });
 
-app.post("/greet", function (req, res) {
-    var nam = req.body.namesGreeted
-    var lang = req.body.language
-    Greet.setNames(nam)
-    // if (nam) {
-    //     res.render('index', {
-    //         msg: nam
-    //     });
-    // }
+app.post("/",  async function (req, res) {
+    var name = req.body.name
+    var language = req.body.language;
 
-
+    const msg = await Greet.greetMessage(name, language)
 
     res.render('index', {
-        msg: Greet.langauges(nam, lang),
-        count: Greet.counterFun(),
-
+        msg,
+        count: await Greet.getCounter(),
     });
-
 });
 
-app.get("/greeted", function (req, res) {
+app.get("/greeted", async function (req, res) {
     res.render('greeted', {
-        
-        greeted: Greet.getNames()
+        greeted: await  Greet.findNames()
     })
 
 });
 
-app.get("/greeted/:count", function (req, res) {
-    console.log(req.params.count);
+app.get("/counter/:name", async function (req, res) {
+    var name = req.params.name;
+    var namesList = await Greet.getUserCount(name)
+    console.log(namesList);
 
-    var user = req.params.count;
-    var namesList = Greet.userCounter(user)
+    const count = namesList.rows.counter || 0;
 
     res.render('counter', {
-        greeted: namesList,
-        user
+        greeted: count,
+        user: name
     });
+
+ 
 });
 
+
+app.post("/clear", async function(req, res){
+    // await factory.clearBtn();
+    // res.redirect('/');
+})
 
 const PORT = process.env.PORT || 3011;
 

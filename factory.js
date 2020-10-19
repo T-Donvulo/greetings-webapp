@@ -1,39 +1,60 @@
-module.exports = function factory() {
+module.exports = function factory(pool) {
 
     //created an object for list names that are greeted
-    var namesList = {}
+    //  var namesList = {}
     //var counts = 0;
-    
+
     //created a function that sets names
-    function setNames(name) {
-        //if an object is not a string then it should be undefined
-        if (namesList[name] === undefined) {
-            //the object should be zero
-            namesList[name] = 0
-        }
-        namesList[name]++;
-    }
-    //gets the names that have been greeted
-    function getNames() {
-        //this function should return an object
-        return namesList
+    // async function setNames(name) {;
+    //     var firstName = await pool.query('insert into greetings(name,counter) values ($1,$2)', [name, 1])
+    //     //if an object is not a string then it should be undefined
+    //     // if (namesList[name] === undefined) {
+    //     //     //the object should be zero
+    //     //     namesList[name] = 0counter
+    //     // }
+    //     // namesList[name]++;
+    // }
 
-    }
+    // async function greet(name) {
+    //     let tableName  = await pool.query('SELECT * from greetings');
+    //     console.log( tableName.rows + " fdfdfdfdfdf")
+
+    //     if (tableName.length === 0) {
+    //         await setNames(name)
+    //     }
+
+    // }
+
+    // //gets the names that have been greeted
+    // function getNames() {
+    //     //this function should return an object
+    //     return namesList
+
+    // }
+    // async function checkNames(name) {
+    //     var check = await pool.query('SELECT name from greetings where name=$1', [name]);
+    //     console.log(check)
+    //     return check.rows;
+    // }
+
+    // async function update() {
+    //     var updates = await pool.query('UPDATE greetings set counter=counter+1');
+    // }
 
 
-    //a function for all the languages that were set
-    function langauges(nam, lang) {
+    // //a function for all the languages that were set
+    function langauges(name, lang) {
         //the function is langauge and it has two parameters that stores names, and langauges
         if (lang === "Swahili") {
-            return 'Hujambo, ' + nam;
+            return 'Hujambo, ' + name;
             //if it was pressed shwahili then greeting(hujambo) should be returned and the name(nam)
         } else if (lang === "TshiVenda") {
             //or if chosen TshiVenda to be the greeting(aa) 
-            return "Aa, " + nam;
+            return "Aa, " + name;
             //then the function should return the greeting(aa) and the name(nam) of the person who greeted
         } else if (lang === "Shona") {
             //or if Shona was chosen
-            return "Mhoro, " + nam
+            return "Mhoro, " + name;
             //mhoro and the name of the person who greeted would be returned
 
         } else {
@@ -43,31 +64,122 @@ module.exports = function factory() {
     }
 
 
-    function counterFun() {
 
-        //the function that counts how many a people were greeted. 
+    // function counterFun() {
 
-       return Object.keys(namesList).length;
-        
+    //     //the function that counts how many a people were greeted. 
 
-    }
+    //     return Object.keys(namesList).length;
 
-    function userCounter(name) {
-        for (const key in namesList) {
-            if (key === name) {
-                var number = namesList[key];   
-            }
-        }
-        return number
-    }
+    // }
+
+    // function userCounter(name) {
+    //     for (const key in namesList) {
+    //         if (key === name) {
+    //             var number = namesList[key];
+    //         }
+    //     }
+    //     return number
+    // }
+
+    // async function clearBtn() {
+    //     await pool.query('delete FROM greetings');
+    // }
 
     //functions are returned
+
+
+
+    /*** database functions | CRUD (Create, Read, Update & Delete) */
+
+    async function greetMessage(name, langauge) {
+
+        if(!name || name.length < 1) {
+            // return error: name is not provided
+        }
+
+        if(!langauge || langauge.length < 1) {
+            // return error: name is not provided
+        }
+        //check if name && language is entered
+
+
+        try {
+
+            if(await checkUserIfExist(name)) {
+                // if is true, it means name exist in database
+                await updateCount(name)
+            } else {
+                await addNameToDatabase(name);
+            }
+
+            return langauges(name, langauge)
+            
+        } catch (error) {
+            console.log(error)
+            return error;
+        }
+    }
+
+    async function checkUserIfExist(name) {
+        var check = await pool.query('SELECT * from greetings where name = $1', [name]);        
+        return check.rowCount > 0;
+
+    }
+
+
+
+  async function addNameToDatabase(name) {
+// insert into greetings(name, counter) values('Thabo', 1);
+console.log("B4 adding");
+
+        await pool.query("insert into greetings(name, counter) values('Jan', 4)");
+        
+        console.log(' done adding');
+        
+    }
+
+
+  async  function updateCount(name) {
+
+        await pool.query('UPDATE greetings set counter=counter+1 where name = $1', [name]);
+    }
+
+
+    async function getCounter() {
+        const users = await pool.query('SELECT * from greetings');        
+        return users.rowCount;
+    }
+
+
+    /**
+     * @returns list of greeted names
+     */
+    async function findNames() {
+
+        const users = await pool.query('SELECT * from greetings');
+        console.log({users: users.rows});
+        
+        return users.rows
+    }
+
+    const getUserCount = async (name) => {
+        
+       return await pool.query('SELECT counter from greetings where name = $1', [name]);
+
+    }
+
+    async function remove() {
+        // delete from 'TABLENAME'
+    }
+
     return {
-        setNames,
-        getNames,
-        langauges,
-        counterFun,
-        userCounter
+        greetMessage,
+        getCounter,
+        findNames,
+        getUserCount,
+        remove
+
     }
 
 }
