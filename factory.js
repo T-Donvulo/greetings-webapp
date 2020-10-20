@@ -128,16 +128,13 @@ module.exports = function factory(pool) {
     }
 
 
+    const addNameToDatabase = async (name) => await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]); 
 
-  async function addNameToDatabase(name) {
-// insert into greetings(name, counter) values('Thabo', 1);
-console.log("B4 adding");
-
-        await pool.query("insert into greetings(name, counter) values('Jan', 4)");
+//   async function addNameToDatabase(name) {
+//         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
         
-        console.log(' done adding');
-        
-    }
+    
+//     }
 
 
   async  function updateCount(name) {

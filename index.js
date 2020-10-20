@@ -83,10 +83,14 @@ app.get("/greeted", async function (req, res) {
 
 app.get("/counter/:name", async function (req, res) {
     var name = req.params.name;
+    // if(name.startsWith('style.css'))
+    // console.log({name});
+    
     var namesList = await Greet.getUserCount(name)
     console.log(namesList);
 
-    const count = namesList.rows.counter || 0;
+    const count = namesList.rows[0].counter || 0;
+
 
     res.render('counter', {
         greeted: count,
