@@ -26,7 +26,7 @@ if (process.env.DATABASE_URL && !local){
     useSSL = true;
 }
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://coder:pg123@localhost:5432/greeting_webapp';
+const connectionString = process.env.DATABASE_URL || 'postgresql://thatodonvulo:pw123@localhost:5432/greeting_webapp';
 
 
 const pool = new Pool({
@@ -39,16 +39,17 @@ const pool = new Pool({
 //     ('index');
 //could be the database password: pg123
 // });
-// app.get('/addFlash', function (req, res) {
-//     req.flash('info', 'Flash Message Added');
-//     res.redirect('/');
-// });
+app.get('/addFlash', function (req, res) {
+    req.flash('info', 'Flash Message Added');
+    res.redirect('/');
+});
 // app.get('/', function (req, res) {
 //     req.flash('info', 'Welcome');
 //     res.render('index', {
 //         title: 'home'
 //     })
 // });
+app.use (flash())
 app.use(express.static('public'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -65,6 +66,7 @@ app.get('/', async function (req, res) {
 app.post("/",  async function (req, res) {
     var name = req.body.name
     var language = req.body.language;
+
 
     const msg = await Greet.greetMessage(name, language)
 
@@ -101,12 +103,14 @@ app.get("/counter/:name", async function (req, res) {
 });
 
 
-app.post("/clear", async function(req, res){
-    // await factory.clearBtn();
-    // res.redirect('/');
+app.get("/clear", async function(req, res){
+    await Greet.remove();
+    res.redirect('/');
+
 })
 
-const PORT = process.env.PORT || 3011;
+
+const PORT = process.env.PORT || 3200;
 
 app.listen(PORT, function () {
     console.log("App started at PORT:", PORT)

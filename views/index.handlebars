@@ -1,45 +1,47 @@
+<div class="first">
+    <strong>
+        <font size="+2"> Greeting</font>
+    </strong></br>
+</div>
+<div class="second">
+    <form action="/" method="post">
+        <label for="names">Name: </label><input type="text" name="name" class="nameEnter"
+            placeholder="e.g Thato"></br></br>
 
-        <div class="first">
-            <strong>
-                <font size="+2"> Greeting</font>
-            </strong></br>
-        </div>
-        <div class="second">
-            <form action="/" method="post">
-                <label for="names">Name: </label><input type="text" name="name" class="nameEnter"
-                    placeholder="e.g Thato"></br></br>
+        <input type="radio" value="Swahili" name="language">Swahili
+        <input type="radio" value="TshiVenda" name="language">TshiVenda
+        <input type="radio" value="Shona" name="language">Shona</br></br>
 
-                <input type="radio" value="Swahili" name="language">Swahili
-                <input type="radio" value="TshiVenda" name="language">TshiVenda
-                <input type="radio" value="Shona" name="language">Shona</br></br>
+        <input type="submit" value="Greet Me" class="greetings">
+        <!-- <button type="button" class="greetings" onclick="clear();">Greet Me</button> -->
 
-                <input type="submit" value="Greet Me" class="greetings">
-                <!-- <button type="button" class="greetings" onclick="clear();">Greet Me</button> -->
 
-                
-            </form>
-        </div>
-        <div class="message">
-            {{msg}}
-        </div>
-        <div class="list">
-            {{count}}
-        </div>
-        <br>
-        <form action="/clear" method="post">
+    </form>
+</div>
+<div class="message">
+    {{msg}}
+</div>
+<div class="list">
+    {{count}}
+</div>
+<br>
+<form action="/clear" method="post">
 
-       <a href="greeted">Greeted Names</a> 
-        <button id= "deleteBtn" class="clearBtn">Clear</button>
+    <a href="greeted">Greeted Names</a>
 
-        </form>
+</form>
 
-        </br>
-        {{#if message.info}}
-        <div class="entry">
-            <h1>{{message.info}}</h1>
-        </div>
-        {{/if}}
-        
-        
-        
-  
+<div>
+    <a href="/clear">
+        <button type="submit" class="clearBtn">Clear</button>
+    </a>
+    
+
+</div>
+
+</br>
+{{#if message.info}}
+<div class="entry">
+    <h1>{{message.info}}</h1>
+</div>
+{{/if}}

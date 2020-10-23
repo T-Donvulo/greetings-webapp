@@ -92,21 +92,28 @@ module.exports = function factory(pool) {
 
     /*** database functions | CRUD (Create, Read, Update & Delete) */
 
-    async function greetMessage(name, langauge) {
-
-        if(!name || name.length < 1) {
-            // return error: name is not provided
+    async function greetMessage(names, langauge) {
+        const regex = /[^A-Za-z]+g/;
+        console.log(names)
+        const lettersOnly = names.replace(regex, "");
+        const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase()
+        
+        if (name ==="" && langauge === undefined ){
+            return "Please Enter Name and Select language of your choice"
         }
 
-        if(!langauge || langauge.length < 1) {
+       else if (!langauge || langauge.length < 1) {
             // return error: name is not provided
+            return "Please Select language";
+        }else if (!name || name.length < 1) {
+            // return error: name is not provided
+            return "Please Enter Name"; 
         }
         //check if name && language is entered
+ else {
+    try {
 
-
-        try {
-
-            if(await checkUserIfExist(name)) {
+            if (await checkUserIfExist(name)) {
                 // if is true, it means name exist in database
                 await updateCount(name)
             } else {
@@ -114,37 +121,42 @@ module.exports = function factory(pool) {
             }
 
             return langauges(name, langauge)
-            
+
         } catch (error) {
             console.log(error)
             return error;
         }
     }
+ }
+    
+
+
+       
 
     async function checkUserIfExist(name) {
-        var check = await pool.query('SELECT * from greetings where name = $1', [name]);        
+        var check = await pool.query('SELECT * from greetings where name = $1', [name]);
         return check.rowCount > 0;
 
     }
 
 
-    const addNameToDatabase = async (name) => await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]); 
+    const addNameToDatabase = async (name) => await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
 
-//   async function addNameToDatabase(name) {
-//         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
-        
-    
-//     }
+    //   async function addNameToDatabase(name) {
+    //         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
 
 
-  async  function updateCount(name) {
+    //     }
+
+
+    async function updateCount(name) {
 
         await pool.query('UPDATE greetings set counter=counter+1 where name = $1', [name]);
     }
 
 
     async function getCounter() {
-        const users = await pool.query('SELECT * from greetings');        
+        const users = await pool.query('SELECT * from greetings');
         return users.rowCount;
     }
 
@@ -155,19 +167,22 @@ module.exports = function factory(pool) {
     async function findNames() {
 
         const users = await pool.query('SELECT * from greetings');
-        console.log({users: users.rows});
-        
+        console.log({ users: users.rows });
+
         return users.rows
     }
 
     const getUserCount = async (name) => {
-        
-       return await pool.query('SELECT counter from greetings where name = $1', [name]);
+
+        return await pool.query('SELECT counter from greetings where name = $1', [name]);
 
     }
 
     async function remove() {
         // delete from 'TABLENAME'
+        var clear = await pool.query('DELETE from greetings');
+        return clear
+        //killall node (for port when giving you problems)
     }
 
     return {

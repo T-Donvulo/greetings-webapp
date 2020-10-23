@@ -1,9 +1,24 @@
-body{
+.container {
     background-color: aqua;
     color: crimson;
-}
-.first{
     padding: 2em;
     margin: auto;
     max-width: 500px;
+}
+/* 
+.one{
+
+    background-color: aqua;
+    color: crimson;
+    padding: 2em;
+    margin: auto;
+    max-width: 500px;
+
+} */
+/* .first{
+    
+} */
+
+ul{
+    list-style-type:none;
 }
