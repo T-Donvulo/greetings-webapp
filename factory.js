@@ -97,41 +97,41 @@ module.exports = function factory(pool) {
         console.log(names)
         const lettersOnly = names.replace(regex, "");
         const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase()
-        
-        if (name ==="" && langauge === undefined ){
+
+        if (name === "" && langauge === undefined) {
             return "Please Enter Name and Select language of your choice"
         }
 
-       else if (!langauge || langauge.length < 1) {
+        else if (!langauge || langauge.length < 1) {
             // return error: name is not provided
             return "Please Select language";
-        }else if (!name || name.length < 1) {
+        } else if (!name || name.length < 1) {
             // return error: name is not provided
-            return "Please Enter Name"; 
+            return "Please Enter Name";
         }
         //check if name && language is entered
- else {
-    try {
+        else {
+            try {
 
-            if (await checkUserIfExist(name)) {
-                // if is true, it means name exist in database
-                await updateCount(name)
-            } else {
-                await addNameToDatabase(name);
+                if (await checkUserIfExist(name)) {
+                    // if is true, it means name exist in database
+                    await updateCount(name)
+                } else {
+                    await addNameToDatabase(name);
+                }
+
+                return langauges(name, langauge)
+
+            } catch (error) {
+                console.log(error)
+                return error;
             }
-
-            return langauges(name, langauge)
-
-        } catch (error) {
-            console.log(error)
-            return error;
         }
     }
- }
     
 
 
-       
+
 
     async function checkUserIfExist(name) {
         var check = await pool.query('SELECT * from greetings where name = $1', [name]);
@@ -190,7 +190,12 @@ module.exports = function factory(pool) {
         getCounter,
         findNames,
         getUserCount,
-        remove
+        checkUserIfExist,
+        remove,
+        langauges,
+        addNameToDatabase,
+        updateCount
+
 
     }
 

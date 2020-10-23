@@ -9,7 +9,7 @@ const pool = new Pool({
     connectionString
 });
 
-const greetings = Greet(pool);
+// const greetings = Greet(pool);
 
 describe("The greetings", function () {
 
@@ -21,33 +21,34 @@ describe("The greetings", function () {
     it("should be able to greet Tshitende in Swahili", async function () {
 
         const greetings = Greet(pool);
+        // greetings.
 
-        assert.equal("Hujambo, Tshitende", await greetings.checkUserIfExist("Tshitende", "Swahili"));
+        assert.equal("Hujambo, Tshitende", await greetings.langauges("Tshitende", "Swahili"));
     })
 
     it("should be able to greet Luruli in TshiVenda", async function () {
         const greetings = Greet(pool);
-        assert.equal("Aa, Ntswaki", await greetings.checkUserIfExist("Ntsawki", "TshiVenda"));
+        assert.equal("Aa, Ntswaki", await greetings.langauges("Ntswaki", "TshiVenda"));
 
     })
 
     it("should be able to greet Mudiwa in Shona", async function () {
        const greetings = Greet(pool);
-        assert.equal("Mhoro, Mudiwa", await greetings.checkUserIfExist("Mudiwa", "Shona"));
+        assert.equal("Mhoro, Mudiwa", await greetings.langauges("Mudiwa", "Shona"));
 
     })
 
-    // it("should be able to add names to database and get user counter", async function () {
-    //     const greetings = Greet(pool);
+    it("should be able to add names to database and get user counter", async function () {
+        const greetings = Greet(pool);
 
-    //     await greetings.addNameToDatabase("Thato");
-    //     await greetings.addNameToDatabase("Thato");
+        await greetings.addNameToDatabase("Thato");
+        await greetings.addNameToDatabase("Puseletso");
 
-    //     const counter = await greetings.getCount("Thato")
+        const counter = await greetings.getCounter("Thato");
 
 
-    //     assert.equal(2, counter);
-    // })
+        assert.equal(2, counter);
+    })
 
     // it("should be able to get names", async function () {
     //     const greetings = Greet(pool);
@@ -55,22 +56,22 @@ describe("The greetings", function () {
     //     await greetings.addNameToDatabase("Luruli");
     //     await greetings.addNameToDatabase("Luruli");
 
-    //     var names = await greetings.getNames();
+    //     var names = await greetings.checkUserIfExist();
 
-    //     assert.equal(names[0].name , "Luruli")
+    //     assert.equal(names[0].names , "Luruli")
         
     // })
 
 
     
-    // it("should be able to add peoples name in the database and get their counter", async function () {
+    it("should be able to add peoples name in the database and get their counter", async function () {
+const greetings = Greet(pool);
+        await greetings.addNameToDatabase("Lurulo");
 
-    //     await greetings.addNameToDatabase("Lurulo");
+        const counter = await greetings.getCounter("Luruli");
 
-    //     const counter = await greetings.getCount("Luruli");
-
-    //     assert.equal(1, counter);
-    // })
+        assert.equal(1, counter);
+    })
 
 
 
