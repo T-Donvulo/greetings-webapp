@@ -59,8 +59,8 @@ app.use(bodyParser.json())
 
 
 app.get('/', async function (req, res) {
+   
     res.render('index', {count:  await Greet.getCounter()});
-
 });
 
 app.post("/",  async function (req, res) {
@@ -84,6 +84,7 @@ app.get("/greeted", async function (req, res) {
 });
 
 app.get("/counter/:name", async function (req, res) {
+  
     var name = req.params.name;
     // if(name.startsWith('style.css'))
     // console.log({name});
@@ -97,17 +98,16 @@ app.get("/counter/:name", async function (req, res) {
     res.render('counter', {
         greeted: count,
         user: name
-    });
-
+    })
  
 });
 
 
 app.get("/clear", async function(req, res){
+   
     await Greet.remove();
     res.redirect('/');
-
-})
+});
 
 
 const PORT = process.env.PORT || 3200;
