@@ -101,23 +101,21 @@ module.exports = function factory(pool) {
         if (name === "" && langauge === undefined) {
             return "Please Enter Name and Select language of your choice!!"
         }
-        else if (langauge === "Swahili" && !name || name.length < 1) {
-            return "Ingiza Jina Lako";
-
-        }
-        else if (langauge === "TshiVenda" && !name || name.length < 1) {
-            return "Dzina Lavho";
-        }
-
-        else if (langauge === "Shona" && !name || name.length < 1) {
-            return "Pinda Zita";
-        }
+      
         else if (!langauge || langauge.length < 1) {
             // return error: name is not provided
             return "Please Select language!!";
         } else if (!name || name.length < 1) {
+            if(langauge === "Swahili"){
+                return "Ingiza Jina Lako";
+            }else if (langauge === "TshiVenda"){
+                return "Dzina Lavho";
+            }
+            else if(langauge === "Shona"){
+                return "Pinda Zita";
+            }
             // return error: name is not provided
-            return "Please Enter Name!!";
+            // return "Please Enter Name!!";
         }
         //check if name && language is entered
         else {

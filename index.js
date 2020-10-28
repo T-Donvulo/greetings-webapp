@@ -22,7 +22,7 @@ app.use(session({
 // should we use a SSL connection
 let useSSL = false;
 let local = process.env.LOCAL || false;
-if (process.env.DATABASE_URL && !local){
+if (process.env.DATABASE_URL && !local) {
     useSSL = true;
 }
 
@@ -32,8 +32,8 @@ const connectionString = process.env.DATABASE_URL || 'postgresql://thatodonvulo:
 const pool = new Pool({
     connectionString,
     // ssl : useSSL
-  });
-  const Greet = greeting(pool);
+});
+const Greet = greeting(pool);
 
 // app.get('/', function (req, res) {
 //     ('index');
@@ -49,7 +49,7 @@ app.get('/addFlash', function (req, res) {
 //         title: 'home'
 //     })
 // });
-app.use (flash())
+app.use(flash())
 app.use(express.static('public'));
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -59,14 +59,14 @@ app.use(bodyParser.json())
 
 
 app.get('/', async function (req, res) {
-   
-    res.render('index', {count:  await Greet.getCounter()});
+
+    res.render('index', { count: await Greet.getCounter() });
 });
 
-app.post("/",  async function (req, res) {
+app.post("/", async function (req, res) {
     var name = req.body.name
     var language = req.body.language;
-
+    console.log(req.body)
 
     const msg = await Greet.greetMessage(name, language)
 
@@ -78,17 +78,17 @@ app.post("/",  async function (req, res) {
 
 app.get("/greeted", async function (req, res) {
     res.render('greeted', {
-        greeted: await  Greet.findNames()
+        greeted: await Greet.findNames()
     })
 
 });
 
 app.get("/counter/:name", async function (req, res) {
-  
+
     var name = req.params.name;
     // if(name.startsWith('style.css'))
     // console.log({name});
-    
+
     var namesList = await Greet.getUserCount(name)
     console.log(namesList);
 
@@ -99,12 +99,12 @@ app.get("/counter/:name", async function (req, res) {
         greeted: count,
         user: name
     })
- 
+
 });
 
 
-app.get("/clear", async function(req, res){
-   
+app.get("/clear", async function (req, res) {
+
     await Greet.remove();
     res.redirect('/');
 });

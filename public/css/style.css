@@ -27,6 +27,10 @@ ul{
     color: crimson;
 }
 
+.entry{
+    color: black;
+}
+
 body {
     background-image:  url("../pic/download.jpg");
     background-color: #cccccc;
