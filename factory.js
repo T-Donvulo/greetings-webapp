@@ -93,21 +93,31 @@ module.exports = function factory(pool) {
     /*** database functions | CRUD (Create, Read, Update & Delete) */
 
     async function greetMessage(names, langauge) {
-        const regex = /[^A-Za-z]+g/;
+        const regex = /[^A-Za-z]\d+/g;
         console.log(names)
         const lettersOnly = names.replace(regex, "");
         const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase()
 
         if (name === "" && langauge === undefined) {
-            return "Please Enter Name and Select language of your choice"
+            return "Please Enter Name and Select language of your choice!!"
+        }
+        else if (langauge === "Swahili" && !name || name.length < 1) {
+            return "Ingiza Jina Lako";
+
+        }
+        else if (langauge === "TshiVenda" && !name || name.length < 1) {
+            return "Dzina Lavho";
         }
 
+        else if (langauge === "Shona" && !name || name.length < 1) {
+            return "Pinda Zita";
+        }
         else if (!langauge || langauge.length < 1) {
             // return error: name is not provided
-            return "Please Select language";
+            return "Please Select language!!";
         } else if (!name || name.length < 1) {
             // return error: name is not provided
-            return "Please Enter Name";
+            return "Please Enter Name!!";
         }
         //check if name && language is entered
         else {
@@ -128,7 +138,7 @@ module.exports = function factory(pool) {
             }
         }
     }
-    
+
 
 
 

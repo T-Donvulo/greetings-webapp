@@ -1,12 +1,20 @@
 <div class="first">
     <strong>
         <font size="+2"> Greeting</font>
-    </strong></br>
+    </strong>
 </div>
+</br>
+<div class="message">
+    {{msg}}
+</div>
+</br>
 <div class="second">
     <form action="/" method="post">
         <label for="names">Name: </label><input type="text" name="name" class="nameEnter"
-            placeholder="e.g Thato"></br></br>
+            placeholder="e.g Thato">        Greeted people:
+                        {{count}} </br></b>
+     
+
 
         <input type="radio" value="Swahili" name="language">Swahili
         <input type="radio" value="TshiVenda" name="language">TshiVenda
@@ -15,15 +23,15 @@
         <input type="submit" value="Greet Me" class="greetings">
         <!-- <button type="button" class="greetings" onclick="clear();">Greet Me</button> -->
 
-
+ 
     </form>
+    
 </div>
-<div class="message">
-    {{msg}}
-</div>
-<div class="list">
+
+{{!-- <div class="list">
+    <p>Number of people that have been greeted</p>
     {{count}}
-</div>
+</div> --}}
 <br>
 <form action="/clear" method="post">
 

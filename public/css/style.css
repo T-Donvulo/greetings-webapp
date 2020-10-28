@@ -1,6 +1,6 @@
 .container {
     background-color: aqua;
-    color: crimson;
+    color: black;
     padding: 2em;
     margin: auto;
     max-width: 500px;
@@ -21,4 +21,15 @@
 
 ul{
     list-style-type:none;
+}
+
+.message{
+    color: crimson;
+}
+
+body {
+    background-image:  url("../pic/download.jpg");
+    background-color: #cccccc;
+    background-size: cover;
+    font-size: 1;
 }

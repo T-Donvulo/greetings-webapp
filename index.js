@@ -110,7 +110,7 @@ app.get("/clear", async function(req, res){
 });
 
 
-const PORT = process.env.PORT || 3200;
+const PORT = process.env.PORT || 3100;
 
 app.listen(PORT, function () {
     console.log("App started at PORT:", PORT)
