@@ -40,7 +40,6 @@ const Greet = greeting(pool);
 //could be the database password: pg123
 // });
 app.get('/addFlash', function (req, res) {
-    req.flash('info', 'Flash Message Added');
     res.redirect('/');
 });
 // app.get('/', function (req, res) {
@@ -66,15 +65,22 @@ app.get('/', async function (req, res) {
 app.post("/", async function (req, res) {
     var name = req.body.name
     var language = req.body.language;
-    console.log(req.body)
+    // console.log(req.body)
 
-    const msg = await Greet.greetMessage(name, language)
+    if (name === '' && language === undefined) {
+        req.flash('info', await Greet.greetMessage(name, language))
+
+        res.render('index')
+        return;
+    }
 
     res.render('index', {
-        msg,
+         msg :  await Greet.greetMessage(name, language),
         count: await Greet.getCounter(),
     });
 });
+
+
 
 app.get("/greeted", async function (req, res) {
     res.render('greeted', {
@@ -90,7 +96,7 @@ app.get("/counter/:name", async function (req, res) {
     // console.log({name});
 
     var namesList = await Greet.getUserCount(name)
-    console.log(namesList);
+    // console.log(namesList);
 
     const count = namesList.rows[0].counter || 0;
 

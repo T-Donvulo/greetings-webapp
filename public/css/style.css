@@ -24,11 +24,11 @@ ul{
 }
 
 .message{
-    color: crimson;
+    color: black;
 }
 
-.entry{
-    color: black;
+.colorRed{
+    color: red;
 }
 
 body {
