@@ -23,11 +23,11 @@ ul{
     list-style-type:none;
 }
 
-.message{
+/* .message{
     color: black;
-}
+} */
 
-.colorRed{
+.error{
     color: red;
 }
 

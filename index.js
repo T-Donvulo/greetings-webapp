@@ -65,11 +65,10 @@ app.get('/', async function (req, res) {
 app.post("/", async function (req, res) {
     var name = req.body.name
     var language = req.body.language;
-    // console.log(req.body)
+    
 
     if (name === '' && language === undefined) {
         req.flash('info', await Greet.greetMessage(name, language))
-
         res.render('index')
         return;
     }
@@ -116,7 +115,7 @@ app.get("/clear", async function (req, res) {
 });
 
 
-const PORT = process.env.PORT || 3100;
+const PORT = process.env.PORT || 3012;
 
 app.listen(PORT, function () {
     console.log("App started at PORT:", PORT)
