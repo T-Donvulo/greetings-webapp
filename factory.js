@@ -1,7 +1,21 @@
 module.exports = function factory(pool) {
+    
 
     // //a function for all the languages that were set
-    function langauges(name, lang) {
+    async function langauges(names, lang) {
+
+// var check = await checkUserIfExist(names)
+// if (check >0){
+//     await updateCount(names)
+// }
+// else { await addNameToDatabase(names)}
+
+        const regex = /[^A-Za-z]\d+/g;
+        const lettersOnly = names.replace(regex, "")
+        const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase()
+        if (name === "") {
+            return "";
+        }
         //the function is langauge and it has two parameters that stores names, and langauges
         if (lang === "Swahili") {
             return 'Hujambo, ' + name;
@@ -14,92 +28,46 @@ module.exports = function factory(pool) {
             //or if Shona was chosen
             return "Mhoro, " + name;
             //mhoro and the name of the person who greeted would be returned
-
-        } else {
-            return "Choose a langauge please!!!"
-        }
-
-    }
-
-
-    async function greetMessage(names, langauge) {
-        const regex = /[^A-Za-z]\d+/g;
-        
-        const lettersOnly = names.replace(regex, "");
-        const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase()
-
-        if (name === "" && langauge === undefined) {
-            return "Please Enter Name and Select language of your choice!!"
-        }
-   
-        else if (langauge === undefined) {
-            // return error: name is not provided
-            return "Please Select language!!";
-        } else if (name === "") {
-            if(langauge === "Swahili"){
-                return "Ingiza Jina Lako";
-            }else if (langauge === "TshiVenda"){
-                return "Dzina Lavho";
-            }
-            else if(langauge === "Shona"){
-                return "Pinda Zita";
-            }
-         
-        }
-        //check if name && language is entered
-        else {
-            try {
-
-                if (await checkUserIfExist(name)) {
-                    // if is true, it means name exist in database
-                    await updateCount(name)
-                } else {
-                    await addNameToDatabase(name);
-                }
-
-                return langauges(name, langauge)
-
-            } catch (error) {
-                console.log(error)
-                return error;
-            }
-        }
+        }else {""}
     }
 
 
     async function checkUserIfExist(name) {
         var check = await pool.query('SELECT * from greetings where name = $1', [name]);
         return check.rowCount > 0;
-
+        //check if the name has been greeted 
     }
 
 
-    const addNameToDatabase = async (name) => await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
+    async function addNameToDatabase(names) {
+        const regex = /[^A-Za-z]\d+/g;
 
-    //   async function addNameToDatabase(name) {
-    //         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
+        const lettersOnly = names.replace(regex, "");
+        const name = lettersOnly.charAt(0).toUpperCase() + lettersOnly.slice(1).toLowerCase();
+        const check = await pool.query(`select id from greetings where name = $1`, [name])
+        if (check.rowCount === 0) {
+            await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 0]);
+        }
 
-
-    //     }
-
+        await pool.query('UPDATE greetings set counter=counter+1 where name = $1', [name]);
+    }
 
     async function updateCount(name) {
 
         await pool.query('UPDATE greetings set counter=counter+1 where name = $1', [name]);
     }
-
-
     async function getCounter() {
         const users = await pool.query('SELECT * from greetings');
         return users.rowCount;
+
+
+        //count all the people that have been greeted
     }
-
-
     /**
-     * @returns list of greeted names
+    * @returns 
      */
     async function findNames() {
-
+        //gets all the names that are being
         const users = await pool.query('SELECT * from greetings');
         console.log({ users: users.rows });
 
@@ -107,7 +75,7 @@ module.exports = function factory(pool) {
     }
 
     const getUserCount = async (name) => {
-
+        //it gets the counter's user(does it stores the count in the database and where is the displays of the count?)
         return await pool.query('SELECT counter from greetings where name = $1', [name]);
 
     }
@@ -120,7 +88,7 @@ module.exports = function factory(pool) {
     }
 
     return {
-        greetMessage,
+        // greetMessage,
         getCounter,
         findNames,
         getUserCount,
@@ -129,6 +97,7 @@ module.exports = function factory(pool) {
         langauges,
         addNameToDatabase,
         updateCount
+        //User
 
 
     }
@@ -203,4 +172,33 @@ module.exports = function factory(pool) {
 
 
 
-    /*** database functions | CRUD (Create, Read, Update & Delete) */
+/*** database functions | CRUD (Create, Read, Update & Delete) */
+
+ //   async function addNameToDatabase(name) {
+    //         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
+
+
+    //     }
+
+
+
+        // else if (name === "" && langauge === undefined) {
+        //     return "Please Enter Name and Select language of your choice!!"
+        // }
+
+        // else if (langauge === undefined) {
+        //     // return error: name is not provided
+        //     return "Please Select language!!";
+        // }
+        // else if (name === "") {
+            // if (langauge === "Swahili") {
+            //     return "Ingiza Jina Lako";
+            // }
+            //  else if (langauge === "TshiVenda") {
+            //     return "Dzina Lavho";
+            // }
+            // else if (langauge === "Shona") {
+            //     return "Pinda Zita";
+            // }
+
+        //}

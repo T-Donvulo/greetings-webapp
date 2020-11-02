@@ -62,26 +62,39 @@ app.get('/', async function (req, res) {
     res.render('index', { count: await Greet.getCounter() });
 });
 
-app.post("/", async function (req, res) {
+app.get("/", async function (req, res) {
+    res.render('index');
+});
+
+app.post("/greet", async function (req, res) {
     var name = req.body.name
     var language = req.body.language;
-    
-
+   let greeted =  await Greet.langauges(name, language);
     if (name === '' && language === undefined) {
-        req.flash('info', await Greet.greetMessage(name, language))
-        res.render('index')
-        return;
+        req.flash('info', 'Please Enter Name & select language!')
+    } else if (language === 'Swahili' && name === '') {
+        req.flash('info', 'Ingiza Jina Lako')
+    } else if (language === 'TshiVenda' && name === '') {
+        req.flash('info', 'Dzina Lavho')
+    } else if (language === 'Shona' && name === '') {
+        req.flash('info', 'Pinda Zita')
+    } else if (language === undefined) {
+        req.flash('info', 'Select language!')
+    } else if(isNaN(name) === false){
+        req.flash('info', 'letters only A-Z, a-z!')
+    }   else {
+         await Greet.addNameToDatabase(name);
+        
+        //console.log(count)
     }
-
     res.render('index', {
-         msg :  await Greet.greetMessage(name, language),
-        count: await Greet.getCounter(),
+        msg: greeted,
+        count: await Greet.getCounter(name)
     });
 });
 
-
-
 app.get("/greeted", async function (req, res) {
+
     res.render('greeted', {
         greeted: await Greet.findNames()
     })
