@@ -1,65 +1,78 @@
-// module.exports = function routes(pool){
-    
+module.exports = function separatedRoutes(Greet){
+    async function getsCounter(req, res) {
 
-//     async function home(){
-//         res.render('index', {count:  await Greet.getCounter()});
-   
-//     }
+        res.render('index', { count: await Greet.getCounter() });
+    };
 
-//     async function home_greetMessage(){
-//         var name = req.body.name
-//     var language = req.body.language;
+    async function home (req, res) {
+        res.render('index')};
 
+        function flashset(req, res) {
+            res.redirect('/');
+        };
 
-//     const msg = await Greet.greetMessage(name, language)
+        async function myErrorsMSG(req, res) {
+            var name = req.body.name
+            var language = req.body.language;
+           let greeted =  await Greet.langauges(name, language);
+            if (name === '' && language === undefined) {
+                req.flash('info', 'Please Enter Name & select language!')
+            } else if (language === 'Swahili' && name === '') {
+                req.flash('info', 'Ingiza Jina Lako')
+            } else if (language === 'TshiVenda' && name === '') {
+                req.flash('info', 'Dzina Lavho')
+            } else if (language === 'Shona' && name === '') {
+                req.flash('info', 'Pinda Zita')
+            } else if (language === undefined) {
+                req.flash('info', 'Select language!')
+            } else if(isNaN(name) === false){
+                req.flash('info', 'letters only A-Z, a-z!')
+            }   else {
+                 await Greet.addNameToDatabase(name);
+                
+            }
+            res.render('index', {
+                msg: greeted,
+                count: await Greet.getCounter(name)
+            });
+        };
 
-//     res.render('index', {
-//         msg,
-//         count: await Greet.getCounter(),
-//     });
+        async function toFindNames(req, res) {
 
-//     }
-
-//     async function greetedPeople(){
-//         res.render('greeted', {
-//             greeted: await  Greet.findNames()
-//         })
+            res.render('greeted', {
+                greeted: await Greet.findNames()
+            })
         
+        };
 
-//     }
+        async function countIndividual(req, res) {
 
-//     async function countPeople(){
-//         var name = req.params.name;
-//         // if(name.startsWith('style.css'))
-//         // console.log({name});
+            var name = req.params.name;
+               var namesList = await Greet.getUserCount(name)
+                const count = namesList.rows[0].counter || 0;
         
-//         var namesList = await Greet.getUserCount(name)
-//         console.log(namesList);
-    
-//         const count = namesList.rows[0].counter || 0;
-    
-    
-//         res.render('counter', {
-//             greeted: count,
-//             user: name
-//         });
+            res.render('counter', {
+                greeted: count,
+                user: name
+            })
         
-//     }
+        };
 
-//     async function clear(){
-//         await Greet.remove();
-//         res.redirect('/');
-    
-//     }
+        async function clearingBTN(req, res) {
 
-// return{
-//     home,
-//     home_greetMessage,
-//     greetedPeople,
-//     countPeople,
-//     clear
- 
+            await Greet.remove();
+            res.redirect('/');
+        };
 
-// }
-    
-// }
+
+
+return{
+    getsCounter,
+    home,
+    myErrorsMSG,
+    toFindNames,
+    countIndividual,
+    clearingBTN,
+    flashset
+}
+}

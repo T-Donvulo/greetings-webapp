@@ -1,14 +1,7 @@
 module.exports = function factory(pool) {
     
-
     // //a function for all the languages that were set
     async function langauges(names, lang) {
-
-// var check = await checkUserIfExist(names)
-// if (check >0){
-//     await updateCount(names)
-// }
-// else { await addNameToDatabase(names)}
 
         const regex = /[^A-Za-z]\d+/g;
         const lettersOnly = names.replace(regex, "")
@@ -69,13 +62,12 @@ module.exports = function factory(pool) {
     async function findNames() {
         //gets all the names that are being
         const users = await pool.query('SELECT * from greetings');
-        console.log({ users: users.rows });
+       
 
         return users.rows
     }
 
     const getUserCount = async (name) => {
-        //it gets the counter's user(does it stores the count in the database and where is the displays of the count?)
         return await pool.query('SELECT counter from greetings where name = $1', [name]);
 
     }
@@ -88,7 +80,6 @@ module.exports = function factory(pool) {
     }
 
     return {
-        // greetMessage,
         getCounter,
         findNames,
         getUserCount,
@@ -97,108 +88,10 @@ module.exports = function factory(pool) {
         langauges,
         addNameToDatabase,
         updateCount
-        //User
-
 
     }
 
 }
 
 
-    //created an object for list names that are greeted
-    //  var namesList = {}
-    //var counts = 0;
-
-    //created a function that sets names
-    // async function setNames(name) {;
-    //     var firstName = await pool.query('insert into greetings(name,counter) values ($1,$2)', [name, 1])
-    //     //if an object is not a string then it should be undefined
-    //     // if (namesList[name] === undefined) {
-    //     //     //the object should be zero
-    //     //     namesList[name] = 0counter
-    //     // }
-    //     // namesList[name]++;
-    // }
-
-    // async function greet(name) {
-    //     let tableName  = await pool.query('SELECT * from greetings');
-    //     console.log( tableName.rows + " fdfdfdfdfdf")
-
-    //     if (tableName.length === 0) {
-    //         await setNames(name)
-    //     }
-
-    // }
-
-    // //gets the names that have been greeted
-    // function getNames() {
-    //     //this function should return an object
-    //     return namesList
-
-    // }
-    // async function checkNames(name) {
-    //     var check = await pool.query('SELECT name from greetings where name=$1', [name]);
-    //     console.log(check)
-    //     return check.rows;
-    // }
-
-    // async function update() {
-    //     var updates = await pool.query('UPDATE greetings set counter=counter+1');
-    // }
-
-
-    // function counterFun() {
-
-    //     //the function that counts how many a people were greeted. 
-
-    //     return Object.keys(namesList).length;
-
-    // }
-
-    // function userCounter(name) {
-    //     for (const key in namesList) {
-    //         if (key === name) {
-    //             var number = namesList[key];
-    //         }
-    //     }
-    //     return number
-    // }
-
-    // async function clearBtn() {
-    //     await pool.query('delete FROM greetings');
-    // }
-
-    //functions are returned
-
-
-
-/*** database functions | CRUD (Create, Read, Update & Delete) */
-
- //   async function addNameToDatabase(name) {
-    //         await pool.query("insert into greetings(name, counter) values($1, $2)", [name, 1]);
-
-
-    //     }
-
-
-
-        // else if (name === "" && langauge === undefined) {
-        //     return "Please Enter Name and Select language of your choice!!"
-        // }
-
-        // else if (langauge === undefined) {
-        //     // return error: name is not provided
-        //     return "Please Select language!!";
-        // }
-        // else if (name === "") {
-            // if (langauge === "Swahili") {
-            //     return "Ingiza Jina Lako";
-            // }
-            //  else if (langauge === "TshiVenda") {
-            //     return "Dzina Lavho";
-            // }
-            // else if (langauge === "Shona") {
-            //     return "Pinda Zita";
-            // }
-
-        //}
+   
