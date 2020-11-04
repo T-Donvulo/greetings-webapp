@@ -9,7 +9,6 @@ const pool = new Pool({
     connectionString
 });
 
-// const greetings = Greet(pool);
 
 describe("The greetings", function () {
 
@@ -21,7 +20,6 @@ describe("The greetings", function () {
     it("should be able to greet Tshitende in Swahili", async function () {
 
         const greetings = Greet(pool);
-        // greetings.
 
         assert.equal("Hujambo, Tshitende", await greetings.langauges("Tshitende", "Swahili"));
     })
@@ -50,30 +48,35 @@ describe("The greetings", function () {
         assert.equal(2, counter);
     })
 
-    // it("should be able to get names", async function () {
-    //     const greetings = Greet(pool);
+  it("Should be able to check if the user exists",  async function(){
+      const greetings = Greet(pool);
+       assert.equal( false ,await greetings.checkUserIfExist("Thato"));   
 
-    //     await greetings.addNameToDatabase("Luruli");
-    //     await greetings.addNameToDatabase("Luruli");
+  })
 
-    //     var names = await greetings.checkUserIfExist();
+  it("Should find the names of the users", async function(){
+      const greetings = Greet(pool);
+     await greetings.findNames("Thato");
 
-    //     assert.equal(names[0].names , "Luruli")
-        
-    // })
+  })
 
-
-    
-    it("should be able to add peoples name in the database and get their counter", async function () {
-const greetings = Greet(pool);
-        await greetings.addNameToDatabase("Lurulo");
-
-        const counter = await greetings.getCounter("Luruli");
-
-        assert.equal(1, counter);
-    })
-
-
+  it("Should be able to count individual user", async function(){
+      const greetings = Greet(pool);
+      await greetings.getUserCount("Thato");
+      
+  })
+ it("should be able to update the count of a users", async function(){
+      const greetings = Greet(pool);
+      await greetings.updateCount("Thato");
+  })
+  it("Should be able to count all the users who have been greeted", async function(){
+      const greetings = Greet(pool);
+      await greetings.getCounter("Thato");
+  })
+  it("Should be able to remove users on the database", async function(){
+      const greetings = Greet(pool);
+      await greetings.remove("Thato")
+  })
 
     after(function () {
         pool.end();
