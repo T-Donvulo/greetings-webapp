@@ -55,33 +55,66 @@ describe("The greetings", function () {
   })
 
   it("Should find the names of the users", async function(){
+
       const greetings = Greet(pool);
-     await greetings.findNames("Thato");
+
+      await greetings.addNameToDatabase("Thato");
+      await greetings.addNameToDatabase("Puseletso");
+
+    var names =  await greetings.findNames();
+    assert.deepEqual(  [
+        {
+          name: 'Thato'
+        },
+        {
+          name: 'Puseletso'
+        }
+      ]
+       ,names);
 
   })
-
+//you said I should fix this
   it("Should be able to count individual user", async function(){
       const greetings = Greet(pool);
-      await greetings.getUserCount("Thato");
-      
+
+      await greetings.addNameToDatabase("Thato");
+      await greetings.addNameToDatabase("Thato");
+
+      var userCount = await greetings.getUserCount("Thato");
+      const count = userCount.rows[0].counter 
+     assert.equal(2 ,count);
   })
- it("should be able to update the count of a users", async function(){
-      const greetings = Greet(pool);
-      await greetings.updateCount("Thato");
-  })
+
+
   it("Should be able to count all the users who have been greeted", async function(){
-      const greetings = Greet(pool);
-      await greetings.getCounter("Thato");
+      
+    const greetings = Greet(pool);
+
+    await greetings.addNameToDatabase("Thato");
+    await greetings.addNameToDatabase("Pule");
+    await greetings.addNameToDatabase("Zantu");
+
+    var CountAll = await greetings.getCounter("Kgotso");
+   
+   assert.equal(3 ,CountAll);
+
   })
-  it("Should be able to remove users on the database", async function(){
-      const greetings = Greet(pool);
-      await greetings.remove("Thato")
-  })
+it("Should be able to remove users on the database", async function(){
+  await pool.query( "delete from greetings")    
+})
 
     after(function () {
         pool.end();
     })
 
 });
+
+
+
+
+
+
+
+
 
 

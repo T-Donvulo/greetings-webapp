@@ -61,7 +61,7 @@ module.exports = function factory(pool) {
      */
     async function findNames() {
         //gets all the names that are being
-        const users = await pool.query('SELECT * from greetings');
+        const users = await pool.query('SELECT name from greetings');
        
 
         return users.rows
