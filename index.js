@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
-const greeting = require('./factory.js');
+const greeting = require('./src/handler');
 const separated = require('./separate-routes');
 const session = require('express-session');
 const flash = require('express-flash');
@@ -58,7 +58,7 @@ app.get("/counter/:name", separateInstance.countIndividual)
 app.get("/clear", separateInstance.clearingBTN)
 
 
-const PORT = process.env.PORT || 3012;
+const PORT = process.env.PORT || 3013;
 
 app.listen(PORT, function () {
     console.log("App started at PORT:", PORT)

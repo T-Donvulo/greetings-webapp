@@ -1,7 +1,7 @@
 module.exports = function separatedRoutes(Greet){
     async function getsCounter(req, res) {
 
-        res.render('index', { count: await Greet.getCounter() });
+        res.render('index', { count: await Greet.counter() });
     };
 
     async function home (req, res) {
@@ -14,33 +14,23 @@ module.exports = function separatedRoutes(Greet){
         async function myErrorsMSG(req, res) {
             var name = req.body.name
             var language = req.body.language;
-           let greeted =  await Greet.langauges(name, language);
-            if (name === '' && language === undefined) {
-                req.flash('info', 'Please Enter Name & select language!')
-            } else if (language === 'Swahili' && name === '') {
-                req.flash('info', 'Ingiza Jina Lako')
-            } else if (language === 'TshiVenda' && name === '') {
-                req.flash('info', 'Dzina Lavho')
-            } else if (language === 'Shona' && name === '') {
-                req.flash('info', 'Pinda Zita')
-            } else if (language === undefined) {
-                req.flash('info', 'Select language!')
-            } else if(isNaN(name) === false){
-                req.flash('info', 'letters only A-Z, a-z!')
-            }   else {
-                 await Greet.addNameToDatabase(name);
-                
-            }
+           let greeted =  await Greet.getGreetMessage(name, language);
+
+           if(greeted.startsWith('Please')){
+               req.flash('info', greeted);
+               greeted = ''
+           }
+           
             res.render('index', {
                 msg: greeted,
-                count: await Greet.getCounter(name)
+                count: await Greet.counter(name)
             });
         };
 
         async function toFindNames(req, res) {
 
             res.render('greeted', {
-                greeted: await Greet.findNames()
+                greeted: await Greet.findGreetedNames()
             })
         
         };
@@ -48,8 +38,8 @@ module.exports = function separatedRoutes(Greet){
         async function countIndividual(req, res) {
 
             var name = req.params.name;
-               var namesList = await Greet.getUserCount(name)
-                const count = namesList.rows[0].counter || 0;
+               var namesList = await Greet.getUser(name)
+                const count = namesList.counter || 0;
         
             res.render('counter', {
                 greeted: count,
@@ -60,7 +50,7 @@ module.exports = function separatedRoutes(Greet){
 
         async function clearingBTN(req, res) {
 
-            await Greet.remove();
+            await Greet.deleteNames();
             res.redirect('/');
         };
 
